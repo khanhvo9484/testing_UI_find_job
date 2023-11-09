@@ -9,7 +9,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 
-import LoginIcon from "@mui/icons-material/Login";
+import { Login, Straight } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../../hooks/useAuth";
@@ -115,49 +115,7 @@ const Navbar = ({ drawerWidth }) => {
                   className={(navData) =>
                     navData.isActive ? classes.activeLink : classes.inActiveLink
                   }
-                >
-                  Lịch thi đấu
-                </NavLink>
-              </Typography>
-              <Typography variant="h6" sx={{ margin: "1rem" }}>
-                <NavLink
-                  to="/standings"
-                  className={(navData) =>
-                    navData.isActive ? classes.activeLink : classes.inActiveLink
-                  }
-                >
-                  Bảng xếp hạng
-                </NavLink>
-              </Typography>
-              <Typography variant="h6" sx={{ margin: "1rem" }}>
-                <NavLink
-                  to="/goalscorers"
-                  className={(navData) =>
-                    navData.isActive ? classes.activeLink : classes.inActiveLink
-                  }
-                >
-                  Cầu thủ ghi bàn
-                </NavLink>
-              </Typography>
-              <Typography variant="h6" sx={{ margin: "1rem" }}>
-                <NavLink
-                  to="/clubs"
-                  className={(navData) =>
-                    navData.isActive ? classes.activeLink : classes.inActiveLink
-                  }
-                >
-                  Đội bóng
-                </NavLink>
-              </Typography>
-              <Typography variant="h6" sx={{ margin: "1rem" }}>
-                <NavLink
-                  to="/players"
-                  className={(navData) =>
-                    navData.isActive ? classes.activeLink : classes.inActiveLink
-                  }
-                >
-                  Cầu thủ
-                </NavLink>
+                ></NavLink>
               </Typography>
             </Box>
             <SearchBar />
@@ -169,12 +127,20 @@ const Navbar = ({ drawerWidth }) => {
               }}
             >
               {!isLogin && (
-                <Link to="/login">
-                  <Typography variant="h6" className={classes.functionLink}>
-                    <LoginIcon sx={{ margin: "5px" }} />
-                    Đăng nhập
-                  </Typography>
-                </Link>
+                <>
+                  <Link to="/login">
+                    <Typography variant="h6" className={classes.functionLink}>
+                      <Login sx={{ margin: "5px" }} />
+                      Đăng nhập
+                    </Typography>
+                  </Link>
+                  <Link to="/login">
+                    <Typography variant="h6" className={classes.functionLink}>
+                      <Straight sx={{ margin: "5px 0px 5px 5px" }} />
+                      Đăng ký
+                    </Typography>
+                  </Link>
+                </>
               )}
 
               {isLogin && <UserMenu />}

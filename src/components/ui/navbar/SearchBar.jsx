@@ -163,10 +163,6 @@ const SearchBar = () => {
         filterSelectedOptions
         noOptionsText="Không tìm thấy kết quả"
         open={open}
-        onOpen={() => {
-          setOpen(true);
-          handleLoading();
-        }}
         onClose={() => setOpen(false)}
         renderGroup={(params) => (
           <li key={params.key}>
@@ -178,17 +174,6 @@ const SearchBar = () => {
                 }}
               >
                 {" "}
-                {params.group === "team" ? (
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <SportsSoccer sx={{ marginRight: "0.5rem" }} />
-                    Đội bóng
-                  </Box>
-                ) : (
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <DirectionsRun sx={{ marginRight: "0.5rem" }} />
-                    Cầu thủ
-                  </Box>
-                )}
               </Typography>
             </GroupHeader>
             <GroupItems>{params.children}</GroupItems>
@@ -200,7 +185,7 @@ const SearchBar = () => {
             size="small"
             value={searchValue}
             onChange={handleSearchChange}
-            placeholder="Tìm kiếm cầu thủ, đội bóng,..."
+            placeholder="Tìm kiếm công việc..."
             sx={{
               "& fieldset": { border: "none" },
             }}

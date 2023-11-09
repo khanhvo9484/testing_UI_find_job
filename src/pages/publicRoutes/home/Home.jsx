@@ -1,201 +1,84 @@
 import DefaultLayout from "../../../layout/DefaultLayout";
 import Loader from "@mui/material/CircularProgress";
 
-import { Box, Grid, Grow, Typography, Collapse, Slide } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import { useState, useEffect } from "react";
+import { Box, Typography, Paper } from "@mui/material";
+import { useEffect, useState } from "react";
 import useProgressiveImage from "../../../hooks/useProgressiveImage";
-import bgImage from "../../../assets/background1.jpg";
-import footballPlayer from "../../../assets/football_player1.png";
-import footballPlayer2 from "../../../assets/football_player2.png";
-
-import League from "../../../components/ui/league/League";
-import useCountdown from "../../../hooks/useCountDown";
-import useCurrentLeague from "../../../hooks/useCurrentLeague";
-
-const backgroundStyle = {
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  height: "100vh",
-  width: "100vw",
-  position: "fixed",
-  top: 0,
-  left: 0,
-  zIndex: -1,
-};
-const contentStyle = {
-  zIndex: 2,
-  width: "100%",
-  position: "relative",
-  paddingTop: "80px",
-};
-const useStyles = makeStyles((theme) => ({
-  timeBox: {
-    background: "linear-gradient(135deg, #FE6B8B 30%, #FF8E53 90%)",
-    borderRadius: "4px",
-    minWidth: "70px",
-    minHeight: "70px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  timeContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-around",
-    maxWidth: "500px",
-  },
-}));
+import MyAxios from "../../../api/MyAxios";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const loadedBGImage = useProgressiveImage(bgImage);
-  const loadedPlayerImage = useProgressiveImage(footballPlayer);
-  const loadedPlayerImage2 = useProgressiveImage(footballPlayer2);
-
-  const classes = useStyles();
-  const { remainingTime, hasPassed, setTargetDate } = useCountdown();
-  const { currentLeague } = useCurrentLeague();
-
-  useEffect(() => {
-    if (currentLeague) {
-      setTargetDate(currentLeague?.thoiDiemKetThuc);
+  const navigate = useNavigate();
+  const contentStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+  };
+  const [jobs, setJobs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [notify, setNotify] = useState([]);
+  document.title = "Trang chủ";
+  const getJobs = async () => {
+    try {
+      const res = await MyAxios.get(`/job/all?page=1&limit=10`);
+      setJobs(res?.data?.data?.listJob);
+    } catch (error) {
+      // setNotify(() => [...error.response.data.message]);
+    } finally {
+      setIsLoading(false);
     }
-  }, [currentLeague]);
+  };
+  useEffect(() => {
+    setIsLoading(true);
+    setNotify([]);
+    getJobs();
+  }, []);
+
   return (
     <DefaultLayout>
       <Box>
-        <Box
-          sx={{
-            display: loadedBGImage ? "none" : "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-            width: "100vw",
-          }}
-        >
-          <Loader size="5rem"></Loader>
-        </Box>
-        <Box
-          sx={{
-            display: loadedBGImage && loadedPlayerImage ? "block" : "none",
-          }}
-        >
-          <Box
-            style={{
-              ...backgroundStyle,
-              backgroundImage: `url(${loadedBGImage})`,
-            }}
-          ></Box>
-          <Box style={contentStyle}>
-            <Box>
-              <Grid container spacing={0} justifyContent="space-around">
-                <Grid item xs={12} sm={3}>
-                  <League />
-                </Grid>
+        {isLoading && (
+          <Box sx={{ width: "100%", textAlign: "center" }}>
+            <Loader sx={{ marginTop: "5rem" }} size="3rem"></Loader>
+          </Box>
+        )}
 
-                <Grid item xs={12} sm={7} container>
-                  <Grid item sm={7}>
-                    {currentLeague && (
-                      <Grow in={true} timeout={1000}>
-                        <Box
-                          sx={{
-                            color: "white",
-                            display: "flex",
-                            flexDirection: "column",
-                            // alignItems: "center",
-                          }}
-                        >
-                          <Typography variant="h1" sx={{ margin: "1rem" }}>
-                            Mùa giải sẽ kết thúc sau:
-                          </Typography>
-                          <Box className={classes.timeContainer}>
-                            <Box className={classes.timeBox}>
-                              <Typography variant="h1">
-                                {remainingTime?.days}
-                              </Typography>
-                            </Box>
+        <Box>
+          {!isLoading && (
+            <Typography sx={{ padding: "1rem" }} variant="h3">
+              Danh sách công việc
+            </Typography>
+          )}
 
-                            <Typography variant="h1">ngày </Typography>
-                            <Box className={classes.timeBox}>
-                              <Typography variant="h1">
-                                {remainingTime?.hours}
-                              </Typography>
-                            </Box>
-
-                            <Typography variant="h1">giờ </Typography>
-                            <Box className={classes.timeBox}>
-                              <Typography variant="h1">
-                                {remainingTime?.minutes}
-                              </Typography>
-                            </Box>
-
-                            <Typography variant="h1">phút </Typography>
-                          </Box>
-                        </Box>
-                      </Grow>
-                    )}
-                    <Box
+          <Box sx={{ margin: "0 auto", width: "100%" }}>
+            <Box style={contentStyle}>
+              {jobs &&
+                jobs.map((job) => {
+                  return (
+                    <Paper
+                      elevation={3}
                       sx={{
-                        mt: "2rem",
-                        // background:
-                        //   "linear-gradient(135deg, #FE6B8B 30%, #FF8E53 90%)",
-                        backgroundColor: "primary.main",
-                        borderRadius: "4px",
                         padding: "1rem",
+                        margin: "1rem",
+                        width: "300px",
+                        "&:hover": {
+                          cursor: "pointer",
+                          backgroundColor: "#e3f4fd",
+                        },
+                      }}
+                      key={job.id}
+                      onClick={() => {
+                        navigate(`/detail-job/${job.id}`);
                       }}
                     >
-                      <Typography variant="subtitle1" sx={{ color: "white" }}>
-                        UEFA Champions League là giải đấu bóng đá hàng đầu châu
-                        Âu, thu hút sự cạnh tranh khốc liệt giữa các câu lạc bộ
-                        hàng đầu và mang đến những trận cầu đỉnh cao, với mục
-                        tiêu tìm ra đội bóng vô địch châu lục.
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item sm={3}>
-                    <Box sx={{ zIndex: 0, height: "90vh" }}>
-                      <Slide
-                        in={currentLeague ? true : false}
-                        timeout={1000}
-                        easing={{
-                          enter: "cubic-bezier(0, 0, 0.2, 1)",
-                          exit: "linear",
-                        }}
-                        direction="left"
-                      >
-                        <img
-                          style={{
-                            height: "50vh",
-                            position: "absolute",
-                            bottom: "1.1rem",
-                          }}
-                          src={loadedPlayerImage}
-                        ></img>
-                      </Slide>
-                      <Slide
-                        in={currentLeague ? true : false}
-                        timeout={1200}
-                        easing={{
-                          enter: "cubic-bezier(0, 0.4, 0.3, 1)",
-                          exit: "linear",
-                        }}
-                        direction="left"
-                      >
-                        <img
-                          style={{
-                            height: "50vh",
-                            position: "absolute",
-                            // top: "1rem",
-                            right: "0.5rem",
-                            bottom: "1rem",
-                          }}
-                          src={loadedPlayerImage2}
-                        ></img>
-                      </Slide>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </Grid>
+                      <Box sx={{ minHeight: "3rem" }}>
+                        <Typography variant="h6">{job.title}</Typography>
+                      </Box>
+                      <Typography>${job.salary}</Typography>
+                      <Typography>{job.nameCompany}</Typography>
+                      <Typography>{job.numDayPost}</Typography>
+                    </Paper>
+                  );
+                })}
             </Box>
           </Box>
         </Box>

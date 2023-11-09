@@ -43,19 +43,20 @@ export default function Login() {
 
     try {
       const response = await MyAxios.post(
-        "/auth/login",
+        "/auth/signin",
         JSON.stringify({
-          taiKhoan: username,
-          matKhau: password,
+          email: username,
+          password: password,
         }),
         {
           headers: { "Content-Type": "application/json" },
         }
       );
       const data = response?.data?.data;
-      const accessToken = data.token;
+      const accessToken = data.accessToken;
+      const email = data?.email;
+      const name = data?.name;
       const role = data?.role;
-      const name = data?.hoTen;
       const token = { accessToken, status: "OK" };
       const dob = data?.ngaySinh;
       const image = data?.hinhAnh;
@@ -72,23 +73,14 @@ export default function Login() {
       updateAuth({
         username,
         password,
-        role,
         token,
-        teamId,
-        name,
-        dob,
+        email,
         image,
-        id,
       });
       setNotify({ message: "Đăng nhập thành công", status: "success" });
       setIsFirstLogin(true);
       setTimeout(() => {
-        if (role === "QLGD") {
-          navigate("/organizer/all-leagues", { replace: true });
-        } else if (role === "QLDB") {
-          navigate("/manager/home", { replace: true });
-        }
-        // navigate("/");
+        navigate("/", { replace: true });
       }, 1500);
     } catch (error) {
       if (!error.response) {

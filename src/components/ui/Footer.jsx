@@ -69,9 +69,7 @@ const Footer = ({ drawerWidth }) => {
               <Typography
                 variant="body2"
                 sx={{ color: "white", marginLeft: "10px" }}
-              >
-                Hệ thống quản lý giải đấu hàng đầu
-              </Typography>
+              ></Typography>
             </Box>
           </Grid>
           <Grid item xs={6} sm={3} lg={3}>
@@ -90,9 +88,7 @@ const Footer = ({ drawerWidth }) => {
                   className={(navData) =>
                     navData.isActive ? classes.activeLink : classes.inActiveLink
                   }
-                >
-                  Lịch thi đấu
-                </NavLink>
+                ></NavLink>
               </Typography>
               <Typography variant="subtitle1" sx={{ margin: "0.4rem" }}>
                 <NavLink
@@ -100,9 +96,7 @@ const Footer = ({ drawerWidth }) => {
                   className={(navData) =>
                     navData.isActive ? classes.activeLink : classes.inActiveLink
                   }
-                >
-                  Bảng xếp hạng
-                </NavLink>
+                ></NavLink>
               </Typography>
               <Typography variant="subtitle1" sx={{ margin: "0.4rem" }}>
                 <NavLink
@@ -110,9 +104,7 @@ const Footer = ({ drawerWidth }) => {
                   className={(navData) =>
                     navData.isActive ? classes.activeLink : classes.inActiveLink
                   }
-                >
-                  Đội bóng
-                </NavLink>
+                ></NavLink>
               </Typography>
               <Typography variant="subtitle1" sx={{ margin: "0.4rem" }}>
                 <NavLink
@@ -120,9 +112,7 @@ const Footer = ({ drawerWidth }) => {
                   className={(navData) =>
                     navData.isActive ? classes.activeLink : classes.inActiveLink
                   }
-                >
-                  Cầu thủ
-                </NavLink>
+                ></NavLink>
               </Typography>
             </Box>
           </Grid>
